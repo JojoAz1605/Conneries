@@ -15,9 +15,9 @@ def plusGrandNbAnagrammes():
     creationListeMots()
     cp = 0  # sert de compteur
 
-    for mot in listeMots:
+    for mot in listeMotsPourCalculs:
         nbAnagrammes = len(donneAnagrammes(normalize(mot), listeMotsPourCalculs))  # défini le nb d'anagrammes d'un mot
-        print(round((cp * 100) / len(listeMots), 2), "%", "|", plusGrand, '| Mot actuel: ', normalize(mot))  # affichage
+        print(round((cp * 100) / len(listeMotsPourCalculs), 2), "%", "|", plusGrand, '| Mot actuel: ', normalize(mot))  # affichage
         # si le nb d'anagrammes du mot est plus grand que l'ancien, le remplace
         if nbAnagrammes > plusGrand["nbAnagrammes"]:
             plusGrand["mot"] = lisible(mot)
