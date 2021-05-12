@@ -1,4 +1,6 @@
 listeMots = []  # stocke tous les mots
+listeMotsPourCalculs = []
+
 
 def plusGrandNbAnagrammes():
     """Calcul le nombre d'anagrammes(d'un mot) pour chaque mot
@@ -14,30 +16,36 @@ def plusGrandNbAnagrammes():
     cp = 0  # sert de compteur
 
     for mot in listeMots:
-        nbAnagrammes = len(donneAnagrammes(normalize(mot)))  # défini le nb d'anagrammes d'un mot
-        print(round((cp*100)/len(listeMots), 2), "%", "|", plusGrand, '| Mot actuel: ', normalize(mot))  # affichage
+        nbAnagrammes = len(donneAnagrammes(normalize(mot), listeMotsPourCalculs))  # défini le nb d'anagrammes d'un mot
+        print(round((cp * 100) / len(listeMots), 2), "%", "|", plusGrand, '| Mot actuel: ', normalize(mot))  # affichage
         # si le nb d'anagrammes du mot est plus grand que l'ancien, le remplace
         if nbAnagrammes > plusGrand["nbAnagrammes"]:
             plusGrand["mot"] = lisible(mot)
             plusGrand["nbAnagrammes"] = nbAnagrammes
-            plusGrand["anagrammes"] = donneAnagrammes(mot)
+            plusGrand["anagrammes"] = donneAnagrammes(mot, listeMots)
         cp += 1  # incrémente le compteur
     return plusGrand
 
-def donneAnagrammes(mot):
+
+def donneAnagrammes(mot, listeDeMot):
     """Retourne les anagrammes pour un mot
 
     :param mot: explicite/20(str)
+    :param listeDeMot: une liste de référence(list)
     :return: une liste des anagrammes(list)
     """
-    global listeMots
+    global listeMotsPourCalculs
     listeAnagrammes = []  # stocke les anagrammes trouvés
-    for unMot in listeMots:
+    for unMot in listeDeMot:
         # check si les deux mots sont de la même taille, et si ils sont composés des mêmes lettres
         if len(normalize(mot)) == len(normalize(unMot)) and memeLettres(list(normalize(mot)), list(normalize(unMot))):
             listeAnagrammes.append(lisible(unMot))  # ajoute l'anagramme à la liste
-            listeMots.remove(unMot)  # retire l'anagramme trouvé dans la liste des mots
+            try:
+                listeMotsPourCalculs.remove(unMot)  # retire l'anagramme trouvé dans la liste des mots
+            except ValueError:
+                pass
     return listeAnagrammes
+
 
 def compteLettres(liste):
     """Compte les lettres d'une liste de lettres
@@ -53,6 +61,7 @@ def compteLettres(liste):
             dico[lettre] = 1
     return dico
 
+
 def memeLettres(liste1, liste2):
     """Vérifie que deux liste de lettres sont les mêmes
 
@@ -64,6 +73,7 @@ def memeLettres(liste1, liste2):
         return True
     else:
         return False
+
 
 def normalize(mot):  # permet de normaliser la forme du mot, les accents, caractères spéciaux, etc...
     mot = mot.lower()  # passe le mot en minuscule
@@ -88,8 +98,9 @@ def normalize(mot):  # permet de normaliser la forme du mot, les accents, caract
             newMot += lettre  # ajoute la lettre telle quelle
     return newMot  # retourne le mot
 
+
 def creationListeMots():  # Permet de créer la liste de mots en lisant un txt
-    global listeMots
+    global listeMots, listeMotsPourCalculs
     txtMots = open("liste_francais.txt", 'r')  # Ouvre le fichier txt
     lignes = txtMots.readlines()  # lit toutes les lignes et les stocke dans une variable
     for mot in lignes:  # pour chaque mot existant dans lignes
@@ -99,6 +110,8 @@ def creationListeMots():  # Permet de créer la liste de mots en lisant un txt
     for mot in listeMots:
         if ' ' in mot:
             listeMots.remove(mot)
+    listeMotsPourCalculs = listeMots.copy()
+
 
 def lisible(mot):
     newMot = ''
@@ -108,6 +121,7 @@ def lisible(mot):
         else:
             newMot += lettre
     return newMot
+
 
 def main():
     plusGrandNbAnagrammes()
