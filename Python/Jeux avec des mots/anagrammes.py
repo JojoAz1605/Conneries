@@ -17,7 +17,7 @@ def plusGrandNbAnagrammes():
 
     for mot in listeMotsPourCalculs:
         nbAnagrammes = len(donneAnagrammes(normalize(mot), listeMotsPourCalculs))  # défini le nb d'anagrammes d'un mot
-        print(round((cp * 100) / len(listeMotsPourCalculs), 2), "%", "|", plusGrand, '| Mot actuel: ', normalize(mot))  # affichage
+        print(cp, round((cp * 100) / len(listeMotsPourCalculs), 2), "%", "|", plusGrand, '| Mot actuel: ', normalize(mot))  # affichage
         # si le nb d'anagrammes du mot est plus grand que l'ancien, le remplace
         if nbAnagrammes > plusGrand["nbAnagrammes"]:
             plusGrand["mot"] = lisible(mot)
@@ -82,7 +82,9 @@ def normalize(mot):  # permet de normaliser la forme du mot, les accents, caract
         # assez explicite
         if lettre in '\n-)!\'.':
             newMot += ''
-        elif lettre in 'éèêëœ':
+        elif lettre == 'œ':
+            newMot += "oe"
+        elif lettre in 'éèêë':
             newMot += 'e'
         elif lettre in 'îï':
             newMot += 'i'
@@ -108,7 +110,7 @@ def creationListeMots():  # Permet de créer la liste de mots en lisant un txt
     txtMots.close()  # ferme le txt
     # retire les expressions
     for mot in listeMots:
-        if ' ' in mot:
+        if mot in " -":
             listeMots.remove(mot)
     listeMotsPourCalculs = listeMots.copy()
 
