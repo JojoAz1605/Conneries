@@ -5,6 +5,13 @@ currentPath = path.abspath(getcwd())
 
 listOfFiles = []
 dicExtensions = {}
+exceptions = [basename(__file__), "log.txt"]
+
+def writeLog(string: str):
+    logFile = open("log.txt", 'a')
+    print(string)
+    logFile.write(string + "\n")
+    logFile.close()
 
 def indexOf(string: str, val: str):
     for elem in range(len(string)):
@@ -21,13 +28,13 @@ def findExtension(fileName: str):
 
 def makeListOfFiles():
     global currentPath
-    print("Création de la liste des fichiers...")
+    writeLog("Création de la liste des fichiers...")
     for file in listdir(currentPath):
         if isfile(join(currentPath, file)):
             listOfFiles.append(file)
 
 def makeExtensionsDict(filesList: list):
-    print("Création du dictionnaire des extensions...")
+    writeLog("Création du dictionnaire des extensions...")
     for file in filesList:
         extension = findExtension(file)
         if extension not in dicExtensions.keys():
@@ -37,35 +44,37 @@ def countExtensions():
     global listOfFiles, dicExtensions
     makeListOfFiles()
     makeExtensionsDict(listOfFiles)
-
-    print("Comptage des fichiers...")
+    writeLog("Comptage des fichiers...")
     for file in listOfFiles:
         extension = findExtension(file)
         for key in dicExtensions:
             if extension == key:
                 dicExtensions[key] += 1
-    print("Voici le nombres de fichiers pour chaque extension:\n", dicExtensions)
+    writeLog("Voici le nombres de fichiers pour chaque extension:\n" + str(dicExtensions))
 
 
 def organize():
     global listOfFiles, dicExtensions
     countExtensions()
-    print("Création des fichiers de rangement...")
+    writeLog("Création des fichiers de rangement...")
     for extension in dicExtensions:
         try:
             makedirs('output' + '\\' + extension)
         except FileExistsError:
             pass
-    print("Déplacement des fichiers...")
+    writeLog("Déplacement des fichiers...")
     for file in listOfFiles:
-        print("Déplacement de: ", file)
-        if basename(__file__) != file:
+        writeLog("Déplacement de: " + file)
+        if file in exceptions:
+            writeLog("Impossible de déplacer ce fichier là pour l'instant.")
+        else:
             oldPath = currentPath + '\\' + file
             newPath = currentPath + '\\output' + '\\' + findExtension(file) + '\\' + file
             rename(oldPath, newPath)
-        else:
-            print("Il s'agit de ce fichier là, rangement impossible pour l'instant.")
-    print("Tous les fichiers ont été rangés!")
+    writeLog("Tous les fichiers ont été rangés!")
 
 
 organize()
+
+while True:
+    pass
