@@ -27,18 +27,21 @@ class Dossier:
 
     def listAll(self):
         self.writeLog("Création des listes...")
-        for elem in listdir(self.dir):
-            try:
-                if isfile(join(self.dir, elem)):
-                    self.writeLog("Fichier trouvé: " + elem)
-                    self.files.append(elem)
-                else:
-                    self.writeLog("Dossier trouvé: " + elem)
-                    self.folders.append(Dossier(self.dir + '\\' + elem))
-            except PermissionError:
-                pass
-            except UnicodeEncodeError:
-                pass
+        try:
+            for elem in listdir(self.dir):
+                try:
+                    if isfile(join(self.dir, elem)):
+                        self.writeLog("Fichier trouvé: " + elem)
+                        self.files.append(elem)
+                    else:
+                        self.writeLog("Dossier trouvé: " + elem)
+                        self.folders.append(Dossier(self.dir + '\\' + elem))
+                except PermissionError:
+                    pass
+                except UnicodeEncodeError:
+                    pass
+        except NotADirectoryError:
+            pass
 
     def writeLog(self, string: str):
         logFile = open("log.txt", 'a')
