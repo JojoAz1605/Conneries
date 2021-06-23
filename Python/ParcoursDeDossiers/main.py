@@ -95,4 +95,7 @@ class Dossier:
 
 thisFolder = Dossier(path.abspath(depart))
 thisFolder.search("un")
-print(extensionCount)
+
+extensionFile = open("extension count.txt", 'w')
+extensionFile.write(str(extensionCount))
+extensionFile.close()
