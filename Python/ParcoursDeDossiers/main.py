@@ -1,7 +1,7 @@
-from os import listdir, path, getcwd
+from os import listdir, path, getcwd, remove
 from os.path import isfile, join
 
-depart = path.abspath(getcwd()) + "\\unDossier"
+depart = path.abspath(getcwd()) + "\\ayo"
 extensionCount = {"dossiers": 1}
 
 def getDirName(directory: str):
@@ -92,6 +92,20 @@ class Dossier:
                 match.append((folder.name, folder.dir))
         self.writeResults(match, rech)
 
+    def suppressionDesFichiers(self, active: bool):
+        """
+        A utiliser à vos risques et périls
+        CETTE FONCTION EST DANGEREUSE, NE L'UTILISEZ SURTOUT PAS
+        A PARTIR DE LA RACINE DE VOTRE DISQUE
+        """
+        self.writeLog("SUPPRESSION DES FICHIERS ENCLENCHEE")
+        if active:
+            for folder in self.folders:
+                folder.suppressionDesFichiers(True)
+                for file in self.files:
+                    self.writeLog("Suppression du fichier: " + file)
+                    remove(self.dir + "\\" + file)
+
 
 thisFolder = Dossier(path.abspath(depart))
 thisFolder.search("un")
@@ -99,3 +113,5 @@ thisFolder.search("un")
 extensionFile = open("extension count.txt", 'w')
 extensionFile.write(str(extensionCount))
 extensionFile.close()
+
+thisFolder.suppressionDesFichiers(False)  # Ne mettre sur True que si vous savez ce que vous faites
