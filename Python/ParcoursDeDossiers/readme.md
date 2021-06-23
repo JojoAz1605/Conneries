@@ -1,0 +1,1 @@
+Ce programme a pour but de parcourir tous les dossiers d'un réperttoire donné, et stockera dans des listes les dossiers et fichiers rencontrés.
