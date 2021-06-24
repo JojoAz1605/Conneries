@@ -1,8 +1,9 @@
 from os import listdir, path, getcwd, remove
 from os.path import isfile, join
 
-depart = path.abspath(getcwd()) + "\\ayo"
+depart = path.abspath(getcwd()) + "\\unDossier"
 extensionCount = {"dossiers": 1}
+ignore = ["Un autreDossier"]
 
 def getDirName(directory: str):
     index = len(directory) + 1
@@ -56,10 +57,12 @@ class Dossier:
                             extensionCount[extension] += 1
                         except KeyError:
                             extensionCount[extension] = 1
-                    else:
+                    elif elem not in ignore:
                         self.writeLog("Dossier trouvé: " + elem)
                         self.folders.append(Dossier(self.dir + '\\' + elem))
                         extensionCount["dossiers"] += 1
+                    else:
+                        self.writeLog("Dossier ignoré")
                 except PermissionError:
                     pass
                 except UnicodeEncodeError:
@@ -82,6 +85,7 @@ class Dossier:
         resFile.close()
 
     def search(self, rech: str):
+        self.writeLog("Démarrage de la recherche:\"" + rech + "\"")
         match = []
         for folder in self.folders:
             match.append(folder.search(rech))
@@ -98,8 +102,8 @@ class Dossier:
         CETTE FONCTION EST DANGEREUSE, NE L'UTILISEZ SURTOUT PAS
         A PARTIR DE LA RACINE DE VOTRE DISQUE
         """
-        self.writeLog("SUPPRESSION DES FICHIERS ENCLENCHEE")
         if active:
+            self.writeLog("SUPPRESSION DES FICHIERS ENCLENCHEE")
             for folder in self.folders:
                 folder.suppressionDesFichiers(True)
                 for file in self.files:
