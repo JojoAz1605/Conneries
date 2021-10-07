@@ -1,5 +1,16 @@
 from turtle import*
 import time
+from random import randint
+
+hexa = '0123456789ABCDEF'
+
+def selectColor():
+    """Retourne une couleur en hexa aléatoire"""
+    color = '#'
+    for i in range(6):
+        color += hexa[randint(0, len(hexa)-1)]
+    return color
+        
 
 speed(10000000)
 left(90)
@@ -35,7 +46,7 @@ def frac(longueur, n):
     if n == 0:
         segment(longueur)
     else:
-        color('black')
+        color(selectColor())
         segment(longueur/2)
         right(90)
         frac(longueur, n-1)
@@ -49,4 +60,4 @@ def frac(longueur, n):
         frac(longueur, n-1)
         left(90)
         frac(longueur/2, n-1)
-frac(50, 6)
+frac(60, 10)
